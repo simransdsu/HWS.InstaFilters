@@ -22,6 +22,15 @@ struct ContentView: View {
             Button("Select Imaage") {
                 showingImagePicker = true
             }
+            
+            Button("Save Imaage") {
+                guard let inputImage = inputImage else {
+                    return
+                }
+                
+                let imageSaver = ImageSaver()
+                imageSaver.writeToPhotoAlbum(image: inputImage)
+            }
         }
         .sheet(isPresented: $showingImagePicker) {
             ImagePicker(image: $inputImage)
