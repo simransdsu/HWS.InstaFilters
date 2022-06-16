@@ -13,6 +13,7 @@ struct ContentView: View {
     
     @State private var inputImage: UIImage?
     @State private var image: Image?
+    @State private var processImage: UIImage?
     @State private var filterIntensity = 0.5
     
     @State private var showingImagePicker = false
@@ -92,7 +93,11 @@ struct ContentView: View {
     }
     
     func saveImage() {
+        guard let processImage = processImage else {
+            return
+        }
         
+        ImageSaver().writeToPhotoAlbum(image: processImage)
     }
     
     func changeFilter() {
@@ -114,8 +119,6 @@ struct ContentView: View {
             currentFilter.setValue(filterIntensity * 10, forKey: kCIInputScaleKey)
         }
         
-        
-        
         guard let outputImage = currentFilter.outputImage else {
             return
         }
@@ -123,6 +126,7 @@ struct ContentView: View {
         if let cgImage = content.createCGImage(outputImage, from: outputImage.extent)  {
             let uiImage = UIImage(cgImage: cgImage)
             image = Image(uiImage: uiImage)
+            processImage = uiImage
         }
     }
     
