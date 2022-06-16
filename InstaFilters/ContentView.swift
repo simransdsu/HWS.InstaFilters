@@ -10,42 +10,52 @@ import SwiftUI
 struct ContentView: View {
 
     @State private var image: Image?
-    @State private var inputImage: UIImage?
-    @State private var showingImagePicker = false
+    @State private var filterIntensity = 0.5
     
     var body: some View {
-        VStack {
-            image?
-                .resizable()
-                .scaledToFit()
-            
-            Button("Select Imaage") {
-                showingImagePicker = true
-            }
-            
-            Button("Save Imaage") {
-                guard let inputImage = inputImage else {
-                    return
+        NavigationView {
+            VStack {
+                ZStack {
+                    Rectangle()
+                        .fill(.secondary)
+                    
+                    Text("Tap to select a picture")
+                        .foregroundColor(.white)
+                        .font(.headline)
+                    
+                    image?
+                        .resizable()
+                        .scaledToFit()
                 }
+                .onTapGesture(perform: onTapSelectPictureView)
                 
-                let imageSaver = ImageSaver()
-                imageSaver.writeToPhotoAlbum(image: inputImage)
+                HStack {
+                    Text("Intensity")
+                    Slider(value: $filterIntensity)
+                }
+                .padding(.vertical)
+                
+                HStack {
+                    Button("Change Filter", action: changeFilter)
+                    Spacer()
+                    Button("Save", action: saveImage)
+                }
             }
-        }
-        .sheet(isPresented: $showingImagePicker) {
-            ImagePicker(image: $inputImage)
-        }
-        .onChange(of: inputImage) { _ in
-            loadImage()
+            .padding([.horizontal, .bottom])
+            .navigationTitle("InstaFilter")
         }
     }
     
-    func loadImage() {
-        guard let inputImage = inputImage else {
-            return
-        }
+    func onTapSelectPictureView() {
         
-        image = Image(uiImage: inputImage)
+    }
+    
+    func saveImage() {
+        
+    }
+    
+    func changeFilter() {
+        
     }
 }
 
